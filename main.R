@@ -1,4 +1,4 @@
-# 1- loading libraries
+# 1- package loading 
 source('R/libraries.R', print.eval = TRUE)
 
 # 2- data loading and wrangling
