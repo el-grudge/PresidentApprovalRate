@@ -1,9 +1,10 @@
 # loading data
-df <- read.csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
+approval_topline <- read.csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
+approval_topline$date <- as.Date(approval_topline$modeldate, '%m/%d/%Y')
 
 # data wrangling
 # create a new column, date, that has a values of date type instead of a type factor
-df$date <- as.Date(df$modeldate, '%m/%d/%Y')
+df <- approval_topline
 df <- df %>% rename(approve=approve_estimate, disapprove=disapprove_estimate)
 
 # pivot on estimate

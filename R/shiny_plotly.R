@@ -12,16 +12,16 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$approval_grid <- renderPlot({
-    subgroup + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + linetext + label + facet_grid(vars(subgroup))
+    subgroup + point + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + linetext + label + facet_grid(vars(subgroup))
   })
   output$approval_voters <- renderPlotly({
-    subgroup_voters + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + label_voters
+    subgroup_voters + point + line + ribbon + linerange + colorscale + fillscale + themefte + themesettings + label_voters
   })
   output$approval_adults <- renderPlotly({
-    subgroup_adults + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + label_adults
+    subgroup_adults + point + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + label_adults
   })
   output$approval_allpolls <- renderPlotly({
-    subgroup_allpolls + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + label_allpolls
+    subgroup_allpolls + point + line + ribbon + pointrange + colorscale + fillscale + themefte + themesettings + label_allpolls
   })
 }
 

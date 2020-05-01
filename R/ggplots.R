@@ -11,9 +11,10 @@ label_adults <- labs(title = "Presidents approval and disapproval rates: \n Adul
 label_allpolls <- labs(title = "Presidents approval and disapproval rates: \n All polls")
 
 # common components
-line <- geom_line(aes(color=popular))
+point <- geom_point(aes(color=popular), alpha=0.1)
+line <- geom_smooth(aes(color=popular), se=FALSE)
 ribbon <- geom_ribbon(aes(fill=popular), alpha=0.1)
-pointrange <- geom_pointrange(data=function(x) {filter(x, date==as.Date(cut(date, breaks='8 weeks')))}, aes(color=popular))
+linerange <- geom_linerange(data=function(x) {filter(x, date==as.Date(cut(date, breaks='8 weeks')))}, aes(color=popular))
 colorscale <- scale_color_manual(name='', values=c('forestgreen', 'orangered1'))
 fillscale <- scale_fill_manual(name='', values=c('forestgreen', 'orangered1'))
 themefte <- theme_fivethirtyeight()
