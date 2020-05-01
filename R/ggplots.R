@@ -1,33 +1,21 @@
-# plotting
-# creating new ggplots
-p <- ggplot(df, aes(x = date, y = estimate, color = rev(category)))
-p_v <- ggplot(filter(df, subgroup == "Voters"), aes(x = date, y = estimate, color = rev(category)))
-p_a <- ggplot(filter(df, subgroup == "Adults"), aes(x = date, y = estimate, color = rev(category)))
-p_p <- ggplot(filter(df, subgroup == "All polls"), aes(x = date, y = estimate, color = rev(category)))
-
-# line
-l <- geom_line() 
-
-# smooth line
-s <- geom_smooth() 
-
-# ribbon
-r <- geom_ribbon(aes(ymin = lo, ymax = hi, fill = rev(category), alpha = 0.001)) 
-
-# pointrange
-pr <- geom_pointrange(data = filter(df, date == as.Date(cut(date, breaks = "6 week"))), aes(x = date, ymin = lo, ymax = hi))
-pr_v <- geom_pointrange(data = filter(filter(df, subgroup == "Voters"), date == as.Date(cut(date, breaks = "6 week"))), aes(x = date, ymin = lo, ymax = hi))
-pr_a <- geom_pointrange(data = filter(filter(df, subgroup == "Adults"), date == as.Date(cut(date, breaks = "6 week"))), aes(x = date, ymin = lo, ymax = hi))
-pr_p <- geom_pointrange(data = filter(filter(df, subgroup == "All polls"), date == as.Date(cut(date, breaks = "6 week"))), aes(x = date, ymin = lo, ymax = hi))
+# plot
+subgroup <- df %>% ggplot(aes(x = date, y=estimate, ymin=lo, ymax=hi))
+subgroup_voters <- filter(df, subgroup == "Voters") %>% ggplot(aes(x = date, y=estimate, ymin=lo, ymax=hi))
+subgroup_adults <- filter(df, subgroup == "Adults") %>% ggplot(aes(x = date, y=estimate, ymin=lo, ymax=hi))
+subgroup_allpolls <- filter(df, subgroup == "All polls") %>% ggplot(aes(x = date, y=estimate, ymin=lo, ymax=hi))
 
 # labels
-lb <- labs(title = "Presidents approval and disapproval rates: \n Grid")
-lb_v <- labs(title = 'Presidents approval and disapproval rates: \n Voters')
-lb_a <- labs(title = "Presidents approval and disapproval rates: \n Adults")
-lb_p <- labs(title = "Presidents approval and disapproval rates: \n All polls")
+label <- labs(title = "Presidents approval and disapproval rates: \n Grid")
+label_voters <- labs(title = 'Presidents approval and disapproval rates: \n Voters')
+label_adults <- labs(title = "Presidents approval and disapproval rates: \n Adults")
+label_allpolls <- labs(title = "Presidents approval and disapproval rates: \n All polls")
 
-# text
-g <- geom_text(data = filter(df, date == max(date)), aes(label = estimate), hjust = -0.1, vjust = +1)
-g_v <- geom_text(data = filter(filter(df, subgroup == "Voters"), date == max(date)), aes(label = estimate), hjust = -0.1, vjust = +1)
-g_a <- geom_text(data = filter(filter(df, subgroup == "Adults"), date == max(date)), aes(label = estimate), hjust = -0.1, vjust = +1)
-g_p <- geom_text(data = filter(filter(df, subgroup == "All polls"), date == max(date)), aes(label = estimate), hjust = -0.1, vjust = +1)
+# common components
+line <- geom_line(aes(color=popular))
+ribbon <- geom_ribbon(aes(fill=popular), alpha=0.1)
+pointrange <- geom_pointrange(data=function(x) {filter(x, date==as.Date(cut(date, breaks='8 weeks')))}, aes(color=popular))
+colorscale <- scale_color_manual(name='', values=c('forestgreen', 'orangered1'))
+fillscale <- scale_fill_manual(name='', values=c('forestgreen', 'orangered1'))
+themefte <- theme_fivethirtyeight()
+themesettings <- theme(legend.position = "none", plot.title=element_text(vjust=1.0, size=10))
+linetext <- geom_text(data =   function(x) {filter(x, date==max(date))}, aes(label = paste(round(estimate,2), '%', sep='')), hjust = -0.02, size=3)

@@ -1,14 +1,27 @@
 # loading data
-approval_topline <- read.csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
+df <- read.csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
 
 # data wrangling
-df <- subset(approval_topline, select = -c(president, timestamp))
-df$date <- as.Date(df$modeldate, "%m/%d/%Y")
-df <- subset(df, select = -c(modeldate))
-df_a <- select(df, -contains("dis"))
-df_d <- select(df, -approve_estimate, -approve_hi, -approve_lo)
-df_a <- rename(df_a, estimate = approve_estimate, hi = approve_hi, lo = approve_lo)
-df_d <- rename(df_d, estimate = disapprove_estimate, hi = disapprove_hi, lo = disapprove_lo)
-df_a$category <- "approve"
-df_d$category <- "disapprove"
-df <- rbind(df_a, df_d)
+# create a new column, date, that has a values of date type instead of a type factor
+df$date <- as.Date(df$modeldate, '%m/%d/%Y')
+df <- df %>% rename(approve=approve_estimate, disapprove=disapprove_estimate)
+
+# pivot on estimate
+main_line <- df %>% 
+  select(-contains('lo'), -contains('hi')) %>%
+  pivot_longer(c(approve, disapprove), names_to='popular', values_to='estimate')
+
+# pivot on hi, select new columns only
+hi_line <- df %>% 
+  select(-approve, -disapprove, -contains('lo')) %>%
+  pivot_longer(c(approve_hi, disapprove_hi), names_to='popular_hi', values_to='hi') %>%
+  select(contains('hi'))
+
+# pivot on lo, select new columns only
+lo_line <- df %>% 
+  select(-approve, -disapprove, -contains('hi')) %>%
+  pivot_longer(c(approve_lo, disapprove_lo), names_to='popular_lo', values_to='lo') %>%
+  select(contains('lo'))
+
+# combine on column
+df <- cbind(main_line, hi_line, lo_line)
