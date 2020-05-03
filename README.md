@@ -6,8 +6,7 @@ The original project can be viewed here: https://projects.fivethirtyeight.com/tr
 
 ## Prerequisites
 
-Obviously, you will need to have R and RStudio installed on your machine. Also, you'll need to install the following packages:
-- shiny
+You will need to have R and RStudio installed on your machine. Also, you'll need to install the following packages:
 - plotly
 - tidyverse
 - ggthemes
@@ -18,5 +17,5 @@ More details about the role of each will be illustrated below.
 
 Running this code is very simple, all you need to do is fork the repo, and run the main.R file. The output should look like this:
 
-![alt text](./images/Screenshot%20from%202020-05-01%2017-19-48.png)
+![alt text](./images/finalplot.png)
 
